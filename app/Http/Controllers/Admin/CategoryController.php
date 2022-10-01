@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class CategoryController extends Controller
@@ -17,7 +16,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::all()->whereNotIn('id',1);
+        $categories = Category::all()->where('parent_id',1)->whereNotIn('id',1);
 
         return view('Admin.Category.index')->with('categories',$categories);
     }
@@ -128,7 +127,9 @@ class CategoryController extends Controller
     {
         DB::beginTransaction();
         try{
-            $categories = Category::all()->whereNotIn('id',1);
+            $categories = Category::all()->where('parent_id',1)->whereNotIn('id',1);
+
+            $isOldUpdated = true;
 
             foreach ($categories as $category)
             {
@@ -141,11 +142,21 @@ class CategoryController extends Controller
                     }
                     else
                     {
-                        $oldPosition = $oldPosition + 10;
+                        if($isOldUpdated)
+                        {
+                            $category->update([
+                                'position' => $oldPosition
+                            ]);
 
-                        $category->update([
-                            'position' => $oldPosition
-                        ]);
+                            $isOldUpdated = false;
+
+                        }else{
+                            $oldPosition = $oldPosition + 10;
+
+                            $category->update([
+                                'position' => $oldPosition
+                            ]);
+                        }
                     }
                 }
             }
