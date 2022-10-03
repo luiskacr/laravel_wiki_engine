@@ -16,11 +16,6 @@
                         <h2>Categories List</h2>
                     </div>
                     <div class="float-end">
-                        <a class="text-white" href="{{-- --}}">
-                            <button class="btn btn-primary" type="button">
-                                Order Categories
-                            </button>
-                        </a>
                         <a class="text-white" href="{{ route('category.create') }}">
                             <button class="btn btn-primary" type="button">
                                 Create
@@ -28,7 +23,6 @@
                         </a>
                     </div>
                 </div>
-
             </div>
             <div class="tab-pane show active">
                 <div class="table">
@@ -40,6 +34,7 @@
                             <th>Status</th>
                             <th>Sub Categories</th>
                             <th>Post</th>
+                            <th>Sub Categories Opciones</th>
                             <th >Options</th>
                         </tr>
                         </thead>
@@ -64,10 +59,18 @@
                                         @endif
                                     </th>
                                     <th>
-                                        Count Categories
+                                        {{ $category->getSubcategory($category->id)->count() }}
                                     </th>
                                     <th>
                                         Count Post
+                                    </th>
+                                    <th>
+                                        <a class="text-white" href="{{ route('subcategory.create',$category) }} ">
+                                            <button class="btn btn-primary btn-sm" type="button"> Create SubCategory </button>
+                                        </a>
+                                        <a class="text-white" href="{{ route('subcategory.index',$category) }} ">
+                                            <button class="btn btn-info btn-sm" type="button"> Show SubCategory </button>
+                                        </a>
                                     </th>
                                     <th>
                                         <a class="text-white" href="{{ route('category.show',$category->id) }} ">
@@ -82,6 +85,13 @@
                         </tbody>
                     </table>
                 </div>
+            </div>
+            <div class="row">
+                <a class="text-white" href="{{-- --}}">
+                    <button class="btn btn-primary" type="button">
+                        Order Categories
+                    </button>
+                </a>
             </div>
         </div>
     </div>

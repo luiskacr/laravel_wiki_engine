@@ -39,7 +39,7 @@ Route::group([
 Route::group([
         'prefix' => '/home',
         'middleware'=>'auth',
-        'name' => 'admin',
+        'name' => 'admin.',
     ],
     function (){
         Route::get('/' ,[HomeController::class,'show'] )->name('admin.home');
@@ -55,7 +55,17 @@ Route::group([
         Route::resource('/users','App\Http\Controllers\Admin\UserController');
         Route::resource('/permission','App\Http\Controllers\Admin\PermissionController');
         Route::resource('/role','App\Http\Controllers\Admin\RoleController');
+        Route::resource('/tag','App\Http\Controllers\Admin\TagController');
+        Route::resource('/tag','App\Http\Controllers\Admin\TagController');
+
+        //Category & Sub Category
         Route::resource('/category','App\Http\Controllers\Admin\CategoryController');
+        Route::get('/category/{category:name}/subcategory/',['App\Http\Controllers\Admin\CategoryController','sub_Index'])->name('subcategory.index');
+        Route::post('/category/{category:name}/subcategory',['App\Http\Controllers\Admin\CategoryController','sub_store'])->name('subcategory.store');
+        Route::get('/category/{category:name}/subcategory/create',['App\Http\Controllers\Admin\CategoryController','sub_create'])->name('subcategory.create');
+        Route::get('/category/{category:name}/subcategory/{subcategory}',['App\Http\Controllers\Admin\CategoryController','sub_show'])->name('subcategory.show');
+        Route::get('/category/{category:name}/subcategory/{subcategory}/edit',['App\Http\Controllers\Admin\CategoryController','sub_edit'])->name('subcategory.edit');
+
     }
 );
 

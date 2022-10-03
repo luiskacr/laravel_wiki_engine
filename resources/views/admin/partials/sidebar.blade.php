@@ -89,7 +89,7 @@
     <div class="collapse" id="sidebarPost">
         <ul class="side-nav-second-level">
             <li>
-                <a href="{{-- --}}">Post List</a>
+                <a href="#">Post List</a>
             </li>
         </ul>
     </div>
@@ -105,20 +105,20 @@
                 <a href="{{ route('category.index') }}">Category List</a>
             </li>
             <li>
-                <a href="{{-- --}}">Sub Category List</a>
+                <a href="#">Sub Category List</a>
             </li>
         </ul>
     </div>
 </li>
 <li class="side-nav-item">
-    <a data-bs-toggle="collapse" href="#sidebarCategory" aria-expanded="false" aria-controls="sidebarTags" class="side-nav-link">
+    <a data-bs-toggle="collapse" href="#sidebarTags" aria-expanded="false" aria-controls="sidebarTags" class="side-nav-link">
         <i class="dripicons-tag "></i>
         <span> Tags </span>
     </a>
     <div class="collapse" id="sidebarTags">
         <ul class="side-nav-second-level">
             <li>
-                <a href="{{-- --}}">Tags List</a>
+                <a href="{{ route('tag.index') }}">Tags List</a>
             </li>
         </ul>
     </div>

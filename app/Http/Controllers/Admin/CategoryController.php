@@ -172,4 +172,100 @@ class CategoryController extends Controller
     }
 
     // Sub Categories Options
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return
+     */
+    public function sub_Index(Category $category)
+    {
+        $subCategories = Category::all()->where('parent_id',$category->id);
+
+        $parentCategory = Category::findOrFail($category->id);
+
+        return view('Admin.Category.index_subcategory')->with('subCategories',$subCategories)->with('parentCategory',$parentCategory);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @param Category $category
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function sub_create(Category $category)
+    {
+        $parentCategory = Category::findOrFail($category->id);
+
+        return view('Admin.Category.create_subcategory')->with('parentCategory',$parentCategory);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function sub_store(CategoryRequest $request,int $id)
+    {
+        DB::beginTransaction();
+        try{
+            $categoryOrder = Category::all()->where('parent_id',$id)->sortByDesc('position')->take(1);
+
+            if($categoryOrder->count() == 0){
+                $cateory = Category::create([
+                    'name'=> $request->request->get('name'),
+                    'parent_id' => $id,
+                    'is_enable' => 1,
+                    'position' => 10,
+                ]);
+
+                DB::commit();
+
+                return redirect()->route('category.index')->with('success','Permission created successfully');
+            }
+
+            $newPosition = $categoryOrder->firstOrFail()->position + 10;
+
+            $cateory = Category::create([
+                'name'=> $request->request->get('name'),
+                'parent_id' => $id,
+                'is_enable' => 1,
+                'position' => $newPosition,
+            ]);
+
+            DB::commit();
+        }catch (\Exception $e){
+            DB::rollback();
+
+            return redirect()->route('category.create')->with('error',$e->getMessage());
+        }
+
+        return redirect()->route('category.index')->with('success','Permission created successfully');
+    }
+
+
+    public function sub_show(Category $category, Category $subcategory)
+    {
+        $parentCategory = Category::findOrFail($category->id);
+
+        $subcategory = Category::findOrFail($subcategory->id);
+
+        return view('Admin.Category.show_subcategory')->with('parentCategory',$parentCategory)->with('subcategory',$subcategory);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function sub_edit(Category $category, Category $subcategory)
+    {
+        $parentCategory = Category::findOrFail($category->id);
+
+        $subcategory = Category::findOrFail($subcategory->id);
+
+        return view('Admin.Category.edit')->with('parentCategory',$parentCategory)->with('subcategory',$subcategory);
+    }
 }

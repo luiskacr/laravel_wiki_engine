@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Category extends Model
 {
     use HasFactory;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -30,4 +31,27 @@ class Category extends Model
         'is_enable'=> 'boolean',
         'position' => 'integer'
     ];
+
+
+
+    /**
+     * Function to get Subcategories of a Parent Category
+     *
+     * @param int $id
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getSubcategory(int $id)
+    {
+       return $subCategories = Category::all()->where('parent_id',$id);
+    }
+
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'name';
+    }
 }
